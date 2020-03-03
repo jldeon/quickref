@@ -1,0 +1,164 @@
+\documentclass[10pt,a4paper]{article}
+\usepackage[includeheadfoot,margin=1cm,landscape]{geometry}
+
+\usepackage{multicol}
+
+\usepackage{paralist}
+
+\usepackage{minted}
+
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[C]{Python Quickref}
+
+\begin{document}
+\begin{multicols*}{3}
+
+\section{Types}
+
+Math Types 
+
+\begin{compactitem}
+    \item C-style (\verb|^| for xor, \verb|%| for mod, pow(x,y), abs, etc)
+    \item \verb|math.trunc, math.floor, math.ceil| 
+\end{compactitem}
+
+\noindent Common Sequence Idioms (list, tuple, range, str, bytes)
+
+\begin{compactitem}
+    \item \verb|item in seq| - True if item in seq, else False
+    \item \verb|len(seq)| - Number of items in seq
+    \item \verb|seq[i:j:k]| - slice of seq. Default is 'begin', 'end', '1'
+\end{compactitem}
+
+\noindent tuple - immutable sequence \verb|(a,b,c)|
+
+\noindent list - mutable sequence \verb|[a,b,c]|
+
+\begin{compactitem}
+    \item \verb|l.pop(idx)| - retrieve idx, remove it.  Default -1
+    \item \verb|l.remove(item)| - find item, remove it.  ValueError
+    \item \verb|l.reverse()| - reverse list in place
+    \item \verb|del l[i:j:k]| - remove the slice from the list
+    \item \verb|l.clear()| - same as \verb|del l[:]|
+    \item \verb|l += item| or \verb|l.append(item)| - add to end
+    \item \verb|l *= i| - make l contain n copies of l
+    \item \verb|l = [expr_ for item_ in iterable_ if cond_]| - list comprehension
+\end{compactitem}
+
+\noindent dict - mapping sequence \verb|{a:1,b:2,c:3}|
+
+\begin{compactitem}
+    \item \verb|d.get(key, dfl)| - return key or dfl (or None)
+    \item \verb|d.keys()| - returns (dynamic) view of keys
+    \item \verb|d.values()| - returns view of values
+    \item \verb|d.items()| - returns view of \verb|(key,val)| pairs
+\end{compactitem}
+
+\noindent range - numerical sequence \verb|range(start,stop,step)|
+
+\noindent str - text sequence
+
+\begin{compactitem}
+    \item \verb|s.find(sub,start,end)| - -1 if not found
+    \item \verb|s.strip(chars)| - remove chars from R/L ends
+    \item \verb|s.split(sep, max=-1)| - max+1 returned, all by dflt
+    \item \verb|"{0}".format(a)| - format strings w/pos args
+    \item \verb|s = "%d"%(i)| - format printf-style
+    \item \verb|s = f"{name_} = {value_:{width_}.{prec_}"|
+\end{compactitem}
+
+\section{Syntax}
+
+\noindent Exceptions
+\begin{compactitem}
+    \item \verb|try:| and \verb|except type_ as name_:|
+    \item \verb|finally:| - run regardless of exception (or return, etc)
+    \item \verb|else:| - run if no exception, skip on return, etc
+\end{compactitem}
+
+\begin{compactitem}
+    \item \verb|AssertionError|
+    \item \verb|KeyboardInterrupt|
+    \item \verb|KeyError| - missing key in dict
+    \item \verb|RuntimeError| - generic error
+    \item \verb|ZeroDivisionError|
+    \item \verb|OSError| - base class for \item \verb|FileNotFoundError|, etc
+\end{compactitem}
+
+\noindent Misc Syntax
+\begin{compactitem}
+    \item \verb|python -m pdb myscript.py| for debugger
+    \item \verb|import func_ from package_| then \verb|func_(a)|
+    \item \verb|import package_| then \verb|package_.func_(a)|
+    \item \verb|""" Docstrings are quite important """|
+    \item \verb|if __name__ == "__main__":|
+    \item \verb|with open(fname) as f, open(fname2) as g:| - auto-close on block exit
+    \item \verb|func_var_ = lambda args_: expression_|
+    \item \verb|yield val_| - generator, keep state, but 'yield' val
+    \item \verb|hasattr(obj, 'attr')| - True if obj.attr exists
+    \item \verb|pass| - do nothing (function, except, etc)
+\end{compactitem}
+
+\section{Packages}
+
+\noindent sys - system utils
+\begin{compactitem}
+    \item \verb|sys.argv[0]|, \verb|len(sys.argv)|
+    \item \verb|sys.exit(0)|
+    \item \verb|for line in sys.stdin:| - includes \verb|\n|, rstrip it
+\end{compactitem}
+
+\noindent os
+\begin{compactitem}
+    \item \verb|os.environ['HOME']| or \verb|os.environ.get('HOME', "/tmp")|
+    \item \verb|path = os.path.join(path1, path2)|
+    \item \verb|path_list = os.path.split(path)|
+    \item \verb|bytes_ = os.urandom(size)| - crypto suitable
+\end{compactitem}
+
+\noindent re - regular expressions
+\begin{compactitem}
+    \item \verb|patt = re.compile(r"[a-z]+")|
+    \item \verb|match = patt.match(s)| - no match returns None
+    \item \verb|match(0)| - entire match, \verb|match(1)| - first subgroup
+\end{compactitem}
+
+\noindent pprint - pretty printing
+\begin{compactitem}
+    \item \verb|pp = pprint.PrettyPrinter(indent=4)|
+    \item \verb|pp.print(d)|
+\end{compactitem}
+
+\noindent argparse - argument parsing
+\begin{compactitem}
+    \item \verb|parser = argparse.ArgumentParser(description='')|
+    \item \verb|parser.add_argument('-l', action='store_true')|
+    \item \verb|parser.add_argument('-l', '--long', nargs=1)|
+    \item \verb|parser.add_argument('long')| - positional
+    \item \verb|args = parser.parse_args()| - sys.argv by default
+\end{compactitem}
+
+\noindent json
+\begin{compactitem}
+    \item \verb|json_str = json.dumps(py_obj)|
+    \item \verb|py_obj = json.loads(json_str)|
+\end{compactitem}
+
+\noindent subprocess
+\begin{compactitem}
+    \item \verb|p = subprocess.run(["ls", "-al", "/tmp"])|, \verb|p.returncode|
+    \item Optional args: \verb|shell=True, capture_output=True|
+    \item Output captured: \verb|p.stdout|, \verb|p.stderr|
+\end{compactitem}
+
+\noindent struct
+\begin{compactitem}
+    \item \verb|bytes = struct.pack('qlib', ...)| size order, upper=unsigned
+    \item \verb|(....) = struct.unpack('qlib', bytes)|
+\end{compactitem}
+
+\end{multicols*}
+\end{document}
+
